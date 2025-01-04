@@ -1,0 +1,58 @@
+""" Created by TheIronmaker and fully annotated """
+# Make sure to enable the camera for your raspberry pi by going to configurate/interfaces/camera/enable
+# This can be done in terminal by entering suduo raspi-config or navigating through the raspberry's menu in the top left corner
+
+# Importing packages
+import pygame
+from picamera2 import Picamera2
+import numpy as np
+
+# Create camera instance
+camera = Picamera2()
+
+# Configuration to set the mode
+camera.configure(camera.create_preview_configuration())
+
+# Starts the Camera
+camera.start()
+
+# Make pygame window
+screen = pygame.display.set_mode((640, 480))
+
+# Mainloop
+run = True
+while run:
+    # Window closing code
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+			
+    # Background refresh to clear screen
+    screen.fill((0, 0, 0))
+	
+    # Get frame from camera
+    frame = camera.capture_array()
+	
+    # This will delete the unnecessary alpha channel 
+    frame = frame[:, :, :3]
+	
+    # This converts is to a usable numpy format
+    frame = np.array(frame, dtype=np.uint8)
+	
+    # This rotates the image to be right-side-up
+    frame = np.transpose(frame, (1, 0, 2))
+	
+    # This converts it to a usable pygame surface type
+    frame = pygame.surfarray.make_surface(frame)
+	
+    # This puts it on the screen like normal
+    screen.blit(frame, (0, 0))
+	
+    # This updates the screen - Very important step!
+    pygame.display.flip()
+
+# Closes pygame properly
+pygame.quit()
+
+# Stops the Camera
+camera.stop()
