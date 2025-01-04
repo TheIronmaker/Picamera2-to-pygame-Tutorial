@@ -1,4 +1,4 @@
-""" Created by TheIronmaker and fully annotated """
+""" Created by Andrew Morris and fully annotated """
 # Make sure to enable the camera for your raspberry pi by going to configurate/interfaces/camera/enable
 # This can be done in terminal by entering suduo raspi-config or navigating through the raspberry's menu in the top left corner
 
